@@ -17,6 +17,7 @@ public class PrácticaFinalMP {
     public static void main(String[] args) {
         
         SnakePanel game= new SnakePanel();
+        game.setVisible(true);
         
     }
     
