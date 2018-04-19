@@ -16,6 +16,8 @@ public class SnakeController extends Thread implements Observer {
     private OutputStream oST;
     private Snake snk;
     private boolean connected;
+    BufferedReader read;
+    private boolean stopped;
 
 
     public SnakeController(Socket s, InputStream inputStream, OutputStream outputStream,int id, ScoreCounter scores) {
@@ -24,7 +26,9 @@ public class SnakeController extends Thread implements Observer {
         this.iST = inputStream;
         this.oST = outputStream;
         this.snk = new Snake(scores,id);
+        this.read = new BufferedReader(new InputStreamReader(iST));
         this.connected = true;
+        this.stopped = true;
 
     }
 
@@ -32,17 +36,59 @@ public class SnakeController extends Thread implements Observer {
 
     public void run() {
 
+        while(stopped){
+            try {
+                String[] start = read.readLine().split(";");
+                if (start[0].equals("STARTINFO")){
+                    this.snk.setName(start[1]);
+                    this.stopped = false;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
         while (this.connected) {
             try {
 
-                BufferedReader read = new BufferedReader(new InputStreamReader(iST));
+
                 String[] msg = read.readLine().split(";");
                 if (msg[0].equals("FIN") ){
                     this.s.close();
                     this.connected = false;
                 }else {
-                    snk.send(msg);
+                    switch (msg[0]){
+                        case "DIR":
+                            this.snk.setMov(msg[1]);
+
+                            break;
+                        case "SCR":
+
+                            this.snk.addScore();
+                            break;
+                            
+                        case "STP":
+
+                            this.stopped=true;
+                            break;
+
+                        case "START":
+
+                                this.stopped = false;
+                                break;
+
+
+                        default :
+                            throw new IllegalMessageArgument("Internal connection error, disconnecting");
+                    }
+
+                    snk.move();
                 }
+
+
             } catch (IOException e) {
                 try {
                     oST.write("ERR; Error al recibir mensaje mediante socket".getBytes());

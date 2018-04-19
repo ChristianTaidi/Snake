@@ -16,11 +16,12 @@ public class ServerConection {
 
             ServerSocket socket = new ServerSocket(8000);
             ScoreCounter counter = new ScoreCounter();
+
             while (true){
 
                 Socket s = socket.accept();
 
-                new SnakeController(s,s.getInputStream(),s.getOutputStream(),this.id,counter).run();
+                new SnakeController( s , s.getInputStream(), s.getOutputStream(  ), this.id , counter).run();
                 this.id += 1;
             }
         } catch (IOException e) {

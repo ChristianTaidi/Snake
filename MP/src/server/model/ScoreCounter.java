@@ -36,10 +36,11 @@ public class ScoreCounter extends Observable{
         }
     }
 
+    @Override
     public String toString(){
-        String str= "PTS; " +String.valueOf(scores.size())+";";
-        for(Integer i:this.scores.values()){
-            str = str + i + ";";
+        String str= "PTS; " + String.valueOf(scores.size())+";";
+        for(Integer i:this.scores.keySet()){
+            str = str + i + ";" + this.scores.get(i) + ";" ;
         }
         return str;
     }

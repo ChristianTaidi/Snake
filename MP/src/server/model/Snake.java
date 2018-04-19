@@ -11,6 +11,7 @@ import java.util.Set;
 public class Snake extends Observable {
 
     private int id;
+    private String name;
     private int score;
     private String mov;
     private Node head;
@@ -24,9 +25,10 @@ public class Snake extends Observable {
         this.head = new Node(45,45);
         this.body = new HashSet<>();
         this.body.add(head);
-        this.tail=head;
+        this.tail= new Node(head.getX(),head.getY());
         this.id = id;
         this.scores = counter;
+        this.scores.addClient(this.id,this.score);
     }
 
     public void move(){
@@ -49,8 +51,10 @@ public class Snake extends Observable {
     }
 
     public void addScore(){
-        this.score += 100;
-        this.scores.updateScore(this.id,this.score);
+        this.setScore();
+
+        this.scores.updateScore(this.id,this.getScore());
+
         this.length += 1;
     }
 
@@ -72,34 +76,17 @@ public class Snake extends Observable {
         return score;
     }
 
-    public void setScore(int score) {
-        score = score;
+    public void setScore() {
+        this.score += 100;
     }
 
     @Override
     public String toString(){
-        return "MOV; " + this.id + this.getX() + ";" + this.getY() + ";" + this.tail.getX() + ";" + this.tail.getY();
+        return "MOV; " + this.id + ";" + this.getX() + ";" + this.getY();
     }
 
-    public void send(String[] msg) throws IllegalMessageArgument{
 
-        switch (msg[0]){
-            case "DIR":
-                this.mov = msg[1];
-                this.move();
-                break;
-            case "SCR":
-                this.addScore();
-                this.scores.updateScore(this.id,this.score);
-                notifyObservers();
-                break;
-
-
-            default :
-
-                throw new IllegalMessageArgument("Internal connection error, disconnecting");
-
-
-        }
+    public void setName(String name) {
+        this.name = name;
     }
 }
