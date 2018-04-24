@@ -33,19 +33,30 @@ public class Node {
         this.y = y;
     }
 
-    public void increaseX() {
-        this.x+=1;
+    public Node increaseX() {
+        return new Node(this.getX()+1,this.getY());
     }
 
-    public void decreaseX() {
-        this.x-=1;
+    public Node decreaseX() {
+        return new Node(this.getX()-1,this.getY());
     }
 
-    public void decreaseY() {
-        this.y-=1;
+    public Node decreaseY() {
+        return new Node(this.getX(),this.getY()-1);
     }
 
-    public void increaseY() {
-        this.y +=1;
+    public Node increaseY() {
+        return new Node(this.getX(),this.getY()+1);
+    }
+
+    public void setPos(int x, int y) {
+        this.setY(y);
+        this.setX(x);
+    }
+
+    @Override
+    public boolean equals(Object n){
+        Node nod =(Node) n;
+        return (this.getX() == nod.getX() && this.getY()==nod.getY() );
     }
 }

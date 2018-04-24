@@ -5,14 +5,14 @@ import java.util.TreeMap;
 
 public class ScoreCounter extends Observable{
 
-    private TreeMap<Integer,Integer> scores;
+    private TreeMap<String,Integer> scores;
 
     public ScoreCounter(){
         this.scores= new TreeMap<>();
     }
 
-    public void addClient(int id, int score){
-        this.scores.put(id,score);
+    public void addClient(String name, int score){
+        this.scores.put(name,score);
         notifyObservers();
     }
 
@@ -26,9 +26,9 @@ public class ScoreCounter extends Observable{
         }
     }
 
-    public boolean updateScore(int id,int score){
-        if (this.scores.containsKey(id)) {
-            this.scores.replace(id, score);
+    public boolean updateScore(String name){
+        if (this.scores.containsKey(name)) {
+            this.scores.replace(name, this.scores.get(name)+100);
             notifyObservers();
             return true;
         }else{
@@ -39,8 +39,8 @@ public class ScoreCounter extends Observable{
     @Override
     public String toString(){
         String str= "PTS; " + String.valueOf(scores.size())+";";
-        for(Integer i:this.scores.keySet()){
-            str = str + i + ";" + this.scores.get(i) + ";" ;
+        for(String client:this.scores.keySet()){
+            str = str + client + ";" + this.scores.get(client) + ";" ;
         }
         return str;
     }

@@ -1,6 +1,7 @@
 package server.controller;
 
 import exceptons.IllegalMessageArgument;
+import server.model.Node;
 import server.model.ScoreCounter;
 import server.model.Snake;
 
@@ -8,15 +9,22 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 public class SnakeController extends Thread implements Observer {
+
+    private final int MAX_SIZE = 90;
 
     private Socket s;
     private InputStream iST;
     private OutputStream oST;
-    private Snake snk;
-    private boolean connected;
     BufferedReader read;
+
+    private Snake snk;
+    private Node treasure;
+
+    private boolean connected;
+
     private boolean stopped;
 
 
@@ -33,13 +41,26 @@ public class SnakeController extends Thread implements Observer {
     }
 
 
+    public void randomTreasure(){
+        Random rng = new Random();
+        int x = rng.nextInt(MAX_SIZE-0);
+        int y = rng.nextInt(MAX_SIZE-0);
+        this.treasure.setPos(x,y);
+
+        try {
+            oST.write(("TRS;" + this.treasure.getX() + ";" + this.treasure.getY()).getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void run() {
 
-        while(stopped){
+        while (stopped) {
             try {
                 String[] start = read.readLine().split(";");
-                if (start[0].equals("STARTINFO")){
+                if (start[0].equals("STARTINFO")) {
                     this.snk.setName(start[1]);
                     this.stopped = false;
                 }
@@ -50,62 +71,68 @@ public class SnakeController extends Thread implements Observer {
         }
 
 
-
         while (this.connected) {
+
+
             try {
+                if (this.iST.available() > 0) {
+                    String[] msg = read.readLine().split(";");
+                    if (msg[0].equals("FIN")) {
+                        this.s.close();
+                        this.connected = false;
 
+                    } else {
+                        switch (msg[0]) {
+                            case "DIR":
+                                this.snk.setMov(msg[1]);
 
-                String[] msg = read.readLine().split(";");
-                if (msg[0].equals("FIN") ){
-                    this.s.close();
-                    this.connected = false;
-                }else {
-                    switch (msg[0]){
-                        case "DIR":
-                            this.snk.setMov(msg[1]);
+                                break;
 
-                            break;
-                        case "SCR":
+                            case "STP":
 
-                            this.snk.addScore();
-                            break;
-                            
-                        case "STP":
+                                this.stopped = true;
 
-                            this.stopped=true;
-                            break;
+                                while (this.stopped) {
+                                    msg = read.readLine().split(";");
+                                    if (msg[0].equals("START")) {
+                                        this.stopped = false;
+                                    }
+                                }
+                                break;
 
-                        case "START":
+                            case "START":
 
                                 this.stopped = false;
                                 break;
 
 
-                        default :
-                            throw new IllegalMessageArgument("Internal connection error, disconnecting");
+                            default:
+                                System.out.println("No message received");
+
+                        }
+
                     }
-
-                    snk.move();
                 }
-
-
             } catch (IOException e) {
-                try {
-                    oST.write("ERR; Error al recibir mensaje mediante socket".getBytes());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            } catch (IllegalMessageArgument e) {
-                try {
-                    oST.write(( "ERR; " + e.getMessage()).getBytes());
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                e.printStackTrace();
             }
-        }
 
+            if (this.checkTreasure()) {
+                snk.addScore();
+                snk.move("keep");
+                this.randomTreasure();
+
+            } else {
+                snk.move("poll");
+            }
+
+
+        }
     }
 
+    private boolean checkTreasure() {
+        return snk.getTail().equals(this.treasure);
+    }
 
 
     @Override
