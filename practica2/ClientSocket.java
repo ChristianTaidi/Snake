@@ -16,7 +16,7 @@ public class ClientSocket {
     
     public ClientSocket()throws Exception{
         try{
-          this.socket = new Socket("127.0.0.1", 9305);
+          this.socket = new Socket("10.10.97.209", 9305);
         }catch(Exception e){
             e.getMessage();
         }

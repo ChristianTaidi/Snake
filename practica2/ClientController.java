@@ -5,6 +5,9 @@
  */
 package practica2;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import practica2.*;
@@ -12,7 +15,7 @@ import practica2.*;
  *
  * @author k.lisowski
  */
-public class ClientController {
+public class ClientController implements Observer{
     private Pixels pixelController;
     private ClientSocket socket;
     
@@ -36,21 +39,6 @@ public class ClientController {
         return nodo;
     }
     
-    public String crearMensaje(KeyEvent e){
-        String msg = "nothing";
-        if(e.getKeyChar() == KeyEvent.VK_UP){
-              msg= "up";
-        }else if(e.getKeyChar() == KeyEvent.VK_DOWN){
-              msg= "down";
-        }else if(e.getKeyChar() == KeyEvent.VK_LEFT){
-              msg= "left"; 
-        }else if(e.getKeyChar() == KeyEvent.VK_RIGHT){
-               msg= "right";
-        }else if(e.getKeyChar() == KeyEvent.VK_V){
-               msg= "speed";
-        }
-        return msg;
-    }
     
     public void parseadorMensajesServer(String msg){
         String[] partes= msg.split(";");
@@ -67,4 +55,17 @@ public class ClientController {
         NodoSnake nodo= new NodoSnake(Integer.parseInt(s1),Integer.parseInt(s2));
         return nodo;
     }
+    
+
+    @Override
+    public void update(Observable o, Object arg) {
+        String msg = (String)arg;
+        try {
+            socket.socketToServer(msg);
+        } catch (Exception ex) {
+            Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

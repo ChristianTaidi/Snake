@@ -31,6 +31,10 @@ public class Pixel {
                 frame.add(panels[i][j]);
     }
         }
+         panels[45][45].setBackground(Color.GREEN);
+    /*    for(int i=0; i<20;i++){
+            panels[45][45+i].setBackground(Color.GREEN);
+        } */
     }
     
     public static void main(String args[]) {

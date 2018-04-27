@@ -12,6 +12,9 @@ import java.awt.LayoutManager;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import practica2.Serpiente;
 
@@ -19,12 +22,12 @@ import practica2.Serpiente;
  *
  * @author c.taidi.2016
  */
-public class Pixels extends javax.swing.JFrame {
+public class Pixels extends JFrame {
 
     /**
      * Creates new form Pixels
      */
-    
+    ObservableClass observable;
     JPanel[][] panels;
     
     public Pixels() {
@@ -53,6 +56,31 @@ public class Pixels extends javax.swing.JFrame {
         
     }
 
+   
+
+    public Pixels(ObservableClass observable) {
+        this.observable=observable;
+        initComponents();
+        mainPanel.setPreferredSize(new Dimension(350, 350));
+        System.out.println(mainPanel.getSize());
+        GridLayout gl = (GridLayout) mainPanel.getLayout();
+        panels = new JPanel[gl.getRows()][gl.getColumns()];
+        
+        System.out.println(gl.getRows());
+        System.out.println(gl.getColumns());
+        
+        for(int i=0; i< gl.getRows();i++){
+            for(int j=0;j<gl.getColumns();j++){
+                
+                panels[i][j] = new JPanel();
+                panels[i][j].setBackground(Color.red);
+                mainPanel.add(panels[i][j]);
+                
+               // System.out.println("panel_"+i+"_"+j);
+                
+            }
+        }    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,8 +94,8 @@ public class Pixels extends javax.swing.JFrame {
         mainPanel = new javax.swing.JPanel();
         botonInicio = new javax.swing.JButton();
         botonPausa = new javax.swing.JButton();
-        campoPuntuacion = new javax.swing.JFormattedTextField();
-        puntuacionLabel = new javax.swing.JLabel();
+        campoPlayerName = new javax.swing.JFormattedTextField();
+        playerNameLabel = new javax.swing.JLabel();
         ejeXLabel = new javax.swing.JLabel();
         ejeYLabel = new javax.swing.JLabel();
         ejeXCampo = new javax.swing.JFormattedTextField();
@@ -94,7 +122,7 @@ public class Pixels extends javax.swing.JFrame {
             }
         });
 
-        puntuacionLabel.setText("Puntuación");
+        playerNameLabel.setText("Nombre Jugador");
 
         ejeXLabel.setText("Eje X");
 
@@ -115,14 +143,14 @@ public class Pixels extends javax.swing.JFrame {
                         .addComponent(ejeYLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(ejeYCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(botonPausa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(botonInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 298, Short.MAX_VALUE)
-                .addComponent(puntuacionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
+                .addComponent(playerNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(campoPuntuacion, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(campoPlayerName, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(81, 81, 81))
             .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -133,8 +161,8 @@ public class Pixels extends javax.swing.JFrame {
                 .addGap(72, 72, 72)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonInicio)
-                    .addComponent(campoPuntuacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(puntuacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoPlayerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(playerNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ejeXLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ejeXCampo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,13 +184,9 @@ public class Pixels extends javax.swing.JFrame {
             botonInicio.setEnabled(false);
             botonPausa.setEnabled(true);
             ejeXCampo.setEditable(false); //maybe ponerlo al arrancar el juego
-            ejeYCampo.setEditable(false);
-            campoPuntuacion.setEditable(false);
-        try {
-            ClientSocket clientSocket= new ClientSocket();
-            } catch (Exception ex) {
-            Logger.getLogger(Pixels.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            ejeYCampo.setEditable(false);  
+        observable.botonInicioMouseClicked(evt);
+           
             /*  Serpiente snake= new Serpiente();
             snake.setList(new NodoSnake(44,45));
             snake.setList(new NodoSnake(45,45));
@@ -190,8 +214,9 @@ public class Pixels extends javax.swing.JFrame {
     private void botonPausaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonPausaMouseClicked
             botonInicio.setEnabled(true);
             botonPausa.setEnabled(false);
+            observable.botonPausaMouseClicked(evt);
     }//GEN-LAST:event_botonPausaMouseClicked
-    
+
     public void draw(NodoSnake nodo){
         panels[nodo.getX()][nodo.getY()].setBackground(Color.GREEN);     
     }
@@ -255,12 +280,28 @@ public class Pixels extends javax.swing.JFrame {
     private javax.swing.JButton botonInicio;
     private javax.swing.JButton botonPausa;
     private javax.swing.ButtonGroup botonesInicioPausa;
-    private javax.swing.JFormattedTextField campoPuntuacion;
+    private javax.swing.JFormattedTextField campoPlayerName;
     private javax.swing.JFormattedTextField ejeXCampo;
     private javax.swing.JLabel ejeXLabel;
     private javax.swing.JFormattedTextField ejeYCampo;
     private javax.swing.JLabel ejeYLabel;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JLabel puntuacionLabel;
+    private javax.swing.JLabel playerNameLabel;
     // End of variables declaration//GEN-END:variables
+    public JButton getBotonInicio(){
+        return this.botonInicio;
+    }
+    public JButton getBotonPausa(){
+        return this.botonPausa;
+    }
+    
+    public JFormattedTextField getCampoPlayerName(){
+        return this.campoPlayerName;
+    }
+    public JFormattedTextField getEjeXCampo(){
+        return this.ejeXCampo;
+    }
+    public JFormattedTextField getEjeYCampo(){
+        return this.ejeYCampo;
+    }
 }

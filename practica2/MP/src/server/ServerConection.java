@@ -1,11 +1,12 @@
-package server;
+package practica2.MP.src.server;
 
-import server.controller.SnakeController;
+
 import server.model.ScoreCounter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import practica2.MP.src.server.controller.SnakeController;
 
 public class ServerConection {
 
@@ -14,7 +15,7 @@ public class ServerConection {
     public void run(){
         try {
 
-            ServerSocket socket = new ServerSocket(8000);
+            ServerSocket socket = new ServerSocket(9305);
             ScoreCounter counter = new ScoreCounter();
 
             while (true){

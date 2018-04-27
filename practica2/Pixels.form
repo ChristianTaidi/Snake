@@ -41,15 +41,15 @@
                       <Component id="ejeYCampo" min="-2" pref="57" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="30" max="32767" attributes="0"/>
+              <EmptySpace pref="17" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="botonPausa" max="32767" attributes="0"/>
                   <Component id="botonInicio" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="298" max="32767" attributes="0"/>
-              <Component id="puntuacionLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="285" max="32767" attributes="0"/>
+              <Component id="playerNameLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="campoPuntuacion" min="-2" pref="70" max="-2" attributes="0"/>
+              <Component id="campoPlayerName" min="-2" pref="70" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
           </Group>
           <Component id="mainPanel" alignment="0" max="32767" attributes="0"/>
@@ -62,8 +62,8 @@
               <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="botonInicio" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="campoPuntuacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="puntuacionLabel" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                  <Component id="campoPlayerName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="playerNameLabel" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="ejeXLabel" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="ejeXCampo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -116,11 +116,11 @@
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="botonPausaMouseClicked"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="campoPuntuacion">
+    <Component class="javax.swing.JFormattedTextField" name="campoPlayerName">
     </Component>
-    <Component class="javax.swing.JLabel" name="puntuacionLabel">
+    <Component class="javax.swing.JLabel" name="playerNameLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Puntuaci&#xf3;n"/>
+        <Property name="text" type="java.lang.String" value="Nombre Jugador"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="ejeXLabel">

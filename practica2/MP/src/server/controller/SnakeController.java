@@ -1,4 +1,4 @@
-package server.controller;
+package practica2.MP.src.server.controller;
 
 import exceptons.IllegalMessageArgument;
 import server.model.Node;
